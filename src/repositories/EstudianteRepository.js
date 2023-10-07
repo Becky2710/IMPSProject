@@ -29,7 +29,7 @@ module.exports = {
           return result.insertId;
 
         }catch(error){
-          console.error('Erro al eliminar el registro', error);
+          console.error('Error al Insertar el registro', error);
         }
     },
 
