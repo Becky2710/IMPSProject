@@ -1,11 +1,10 @@
 const pool = require('../config/databaseController');
-const express = require('express');
-const router = express.Router();
 
 module.exports = {
 
     // Consulta para obtener todos las carreras
-    obtenerTodosLasCarreras: async() => {
+    obtenerTodasLasCarreras: async() => {
+      console.log('Hizo la consulta');
         try {
             const result = await pool.query('SELECT * FROM carreras');
             return result;
@@ -38,24 +37,21 @@ module.exports = {
   
 
      // Actualizar carrera por ID
-     actualizarCarrera: async (nuevosDatosCarrera) => {
-        try {
-        // Debes proporcionar los valores que deseas actualizar en la consulta SQL.
-        const result = await pool.query(
-          'UPDATE carreras SET carrera = ? WHERE idcarrera = ?',
-          [nuevosDatosCarrera.carrera, nuevosDatosCarrera.idcarrera]          
-        );
-    
+     obtenerCarreraPorid: async (idcarrera) =>{
+      try {
+        const result = await pool.query('SELECT * FROM carreras WHERE idcarrera = ?', [idcarrera]);
+         if (result.length > 0){
+             return result[0];
+         }else{
+          return null;
+         }(result.affectedRows > 0)
         
-        return result.affectedRows > 0;
         } catch (error) {
         console.error('Error al actualizar el registro', error);
-        // Puedes manejar el error de otra manera si lo deseas, como lanzar una excepción.
-        throw error;
         }
-  }, 
+     },
 
-   // Eliminar un estudiante
+   // Eliminar carrera
     eliminarCarrera: async(idcarrera) => {
         try{
           const result = await pool.query('DELETE FROM carreras WHERE idcarrera = ?', [idcarrera]);

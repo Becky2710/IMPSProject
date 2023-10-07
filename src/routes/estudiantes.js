@@ -5,6 +5,7 @@ const carrerasQuery = require('../repositories/CarreraRepository');
 
 // Endpoint para mostrar todos los estudiantes
 router.get('/', async (request, response) => {
+  console.log('Entro aqui');
     const estudiantes = await queries.obtenerTodosLosEstudiantes();
 
      response.render('estudiantes/listado', {estudiantes}); // Mostramos el listado de estudiantes
@@ -12,7 +13,7 @@ router.get('/', async (request, response) => {
 
 // Endpoint que permite mostrar el formulario para agregar un nuevo estudiante
 router.get('/agregar', async(request, response) => {
-    const lstCarreras = await carrerasQuery.obtenerTodosLasCarreras();
+    const lstCarreras = await carrerasQuery.obtenerTodasLasCarreras();
     // Renderizamos el formulario
     response.render('estudiantes/agregar', {lstCarreras});
 });
@@ -45,7 +46,7 @@ router.get('/editar/:idestudiante', async (request, response) => {
       const estudiante = await queries.obtenerEstudiantePorid(idestudiante);
 
       if (estudiante) {
-        const lstCarreras = await carrerasQuery.obtenerTodosLasCarreras();
+        const lstCarreras = await carrerasQuery.obtenerTodasLasCarreras();
         response.render('estudiantes/editar',{estudiante,lstCarreras});
       }else{
         response.redirect('/estudiantes');

@@ -35,8 +35,7 @@ app.use('/carreras', require('./routes/carreras')); // Configuracion de ruta par
 // Archivos publicos (aca se coloca todo el código al cual el navegador puede acceder)
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Archivos publicos (aca se coloca todo el código al cual el navegador puede acceder)
-app.use(express.static(path.join(__dirname, 'public')));
+
 
 // Iniciar el servidor 
 app.listen(app.get('port'), () => {

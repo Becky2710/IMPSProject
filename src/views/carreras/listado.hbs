@@ -16,6 +16,7 @@ text-white">Agregar carrera</a>
                 <tr>
                     <th scope="col">Codigo</th>
                     <th scope="col">Carrera</th>
+                    <th scope="col">Opciones</th>
                     
                 </tr>
             </thead>
@@ -25,9 +26,8 @@ text-white">Agregar carrera</a>
                     <th scope="row">{{idcarrera}}</th>
                     <td>{{carrera}}</td>
                     <td>
-                        <a class="btn btn-primary text-white" href="/carreras/editar/{{idcarrera}}">Modificar</a>
-                        <a href="/carreras/eliminar/{{idcarrera}}" class="btn
-btn-danger text-white">Eliminar</a>
+                        <a href="/carreras/editar/{{idcarrera}}" class="btn btn-primary text-white">Modificar</a>
+                        <a href="/carreras/eliminar/{{idcarrera}}" class="btn  btn-danger text-white">Eliminar</a>
                     </td>
                 </tr>
                 {{/each}}
