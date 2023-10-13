@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const queries = require('../repositories/CarreraRepository');
-const carrerasQuery = require('../repositories/CarreraRepository');
 
 // Endpoint para mostrar todas las carreras
 router.get('/', async (request, response) => {
@@ -9,15 +8,28 @@ router.get('/', async (request, response) => {
     const carreras = await queries.obtenerTodasLasCarreras();
     console.log('Salio aqui');
 
-     response.render('carreras/listado', {carreras}); // Mostramos el listado de carreras
+     response.render('carreras/listado', {carreras:carreras}); // Mostramos el listado de carreras
 });
 
-// Endpoint que permite mostrar el formulario para agregar un nuevo estudiante
+// Endpoint que permite mostrar el formulario para agregar una nueva carrera
 router.get('/agregar', async(request, response) => {
-  const lstCarreras = await carrerasQuery.obtenerTodasLasCarreras();
-    // Renderizamos el formulario
+
     response.render('carreras/agregar');
 });
+
+
+
+// Endpoint para agregar una carrera
+router.post('/agregar', async(request, response) => {
+  // Falta agregar logica
+  const { idcarrera, carrera } = request.body;
+  const nuevaCarrera = { idcarrera , carrera};
+
+  const resultado = await queries.insertarCarrera(nuevaCarrera);
+
+  response.redirect('/carreras');
+});
+
 
 // Endpoint para mostrar el formulario de edición
 router.get('/editar/:idcarrera', async (request, response) => {
@@ -26,26 +38,31 @@ router.get('/editar/:idcarrera', async (request, response) => {
         const carrera = await queries.obtenerCarreraPorid(idcarrera);
 
         if (carrera) {
-          const lstCarreras = await carrerasQuery.obtenerTodasLasCarreras();
-          response.render('carreras/editar',{carrera,lstCarreras});
+          response.render('carreras/editar',{idcarrera,carrera});
         }else{
-          response.redirect('/estudiantes');
+          response.redirect('/carreras');
         }
 
 });
 
-  
+// Endpoint que permite editar una carrera
+router.post('/editar/:id', async (request, response) => {
+  const { id} = request.params;
+  const {idcarrera,carrera} = request.body;
+  const datosModificados = {idcarrera,carrera};
 
-// Endpoint para agregar una carrera
-router.post('/agregar', async(request, response) => {
-    // Falta agregar logica
-    const { idcarrera, carrera } = request.body;
-    const nuevaCarrera = { idcarrera , carrera};
+  const resultado = await queries.actualizarCarrera(id, datosModificados);
 
-    const resultado = await queries.insertarCarrera(nuevaCarrera);
-
+  if(resultado){
+    console.log('Estudiante modificado con exito');
     response.redirect('/carreras');
+  }else{
+    console.log('Error al modificar estudiante');
+    response.redirect('/carreras/editar/'+ idcarrera);
+  }
 });
+
+
 
 // Endpoint que permite eliminar un estudiante
 router.get('/eliminar/:idcarrera', async(request, response) => {
@@ -59,21 +76,6 @@ router.get('/eliminar/:idcarrera', async(request, response) => {
 });
 
 
-// Endpoint que permite editar un estudiante
-router.post('/editar/:id', async (request, response) => {
-  const { id} = request.params;
-  const {idcarrera,carrera} = request.body;
-  const datosModificados = {idcarrera,carrera};
 
-  const resultado = await queries.actualizarCarrera(id, datosModificados);
-
-  if(resultado){
-    console.log('Estudiante modificado con exito');
-    response.redirect('/estudiantes');
-  }else{
-    console.log('Error al modificar estudiante');
-    response.redirect('/carreras/editar/'+ idcarrera);
-  }
-});
 
 module.exports = router;

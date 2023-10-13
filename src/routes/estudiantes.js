@@ -47,7 +47,7 @@ router.get('/editar/:idestudiante', async (request, response) => {
 
       if (estudiante) {
         const lstCarreras = await carrerasQuery.obtenerTodasLasCarreras();
-        response.render('estudiantes/editar',{estudiante,lstCarreras});
+        response.render('estudiantes/editar',{lstCarreras,idestudiante,estudiante});
       }else{
         response.redirect('/estudiantes');
       }
@@ -55,12 +55,12 @@ router.get('/editar/:idestudiante', async (request, response) => {
     });
 
 // Endpoint que permite editar un estudiante
-router.post('/editar/:idestudiante', async (request, response) => {
-  const { idestudiante } = request.params;
-  const {nombre,apellido,email,idcarrera,usuario} = request.body;
-  const datosModificados = {nombre,apellido,email,idcarrera,usuario};
+router.post('/editar/:id', async (request, response) => {
+  const { id } = request.params;
+  const {idestudiante,nombre,apellido,email,idcarrera,usuario} = request.body;
+  const datosModificados = {idestudiante,nombre,apellido,email,idcarrera,usuario};
 
-  const resultado = await queries.actualizarEstudiante(idestudiante, datosModificados);
+  const resultado = await queries.actualizarEstudiante(id, datosModificados);
 
   if(resultado){
     console.log('Estudiante modificado con exito');

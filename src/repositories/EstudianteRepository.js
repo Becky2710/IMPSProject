@@ -37,7 +37,7 @@ module.exports = {
     actualizarEstudiante: async(idestudiante, datosModificados) => {
       try{
         const result = await pool.query('UPDATE estudiantes SET ? WHERE idestudiante = ?', [datosModificados,idestudiante]);
-        return result.affectedRows > 0;;
+        return result.affectedRows > 0;
       }catch(error){
         console.error('Error al actualizar el registro', error);
       }
@@ -47,13 +47,13 @@ module.exports = {
     // Actualizar un estudiante por ID
     obtenerEstudiantePorid: async (idestudiante) => {
       try {
-      const result = await pool.query('SELECT * FROM estudiantes WHERE idestudiante = ?', [idestudiante]);
-       if (result.length > 0){
-           return result[0];
-       }else{
-        return null;
-       }(result.affectedRows > 0)
-      
+          const result = await pool.query('SELECT * FROM estudiantes WHERE idestudiante = ?', [idestudiante]);
+          if (result.length > 0){
+             return result[0];
+          }else{
+             return null;
+          }
+          
       } catch (error) {
       console.error('Error al actualizar el registro', error);
       }

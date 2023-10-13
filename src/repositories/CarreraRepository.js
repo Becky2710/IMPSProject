@@ -28,7 +28,7 @@ module.exports = {
      actualizarCarrera: async(idcarrera, datosModificados) => {
       try{
         const result = await pool.query('UPDATE carreras SET ? WHERE idcarrera = ?', [datosModificados,idcarrera]);
-        return result.affectedRows > 0;;
+        return result.affectedRows > 0;
       }catch(error){
         console.error('Error al actualizar el registro', error);
       }
@@ -36,19 +36,14 @@ module.exports = {
 
   
 
-     // Actualizar carrera por ID
+     // Obtener carrera por ID
      obtenerCarreraPorid: async (idcarrera) =>{
       try {
-        const result = await pool.query('SELECT * FROM carreras WHERE idcarrera = ?', [idcarrera]);
-         if (result.length > 0){
-             return result[0];
-         }else{
-          return null;
-         }(result.affectedRows > 0)
-        
-        } catch (error) {
-        console.error('Error al actualizar el registro', error);
-        }
+          const[carrera] = await pool.query('SELECT * FROM carreras  WHERE idcarrera = ?',[idcarrera]);
+          return carrera;
+      } catch (error) {
+         console.log('Error para obtener el registro');
+      }
      },
 
    // Eliminar carrera
