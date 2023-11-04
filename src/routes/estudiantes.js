@@ -26,7 +26,13 @@ router.post('/agregar', async(request, response) => {
 
     const resultado = await queries.insertarEstudiante(nuevoEstudiante);
 
-    response.redirect('/estudiantes');
+    if(resultado){
+      request.flash('success', 'Registro insertado con exito');
+   } else {
+      request.flash('error', 'Ocurrio un problema al guardar el registro');
+   }
+   
+   response.redirect('/estudiantes');
 });
 
 // Endpoint que permite eliminar un estudiante
@@ -35,9 +41,12 @@ router.get('/eliminar/:idestudiante', async(request, response) => {
     const { idestudiante } = request.params;
     const resultado = await queries.eliminarEstudiante(idestudiante);
     if(resultado > 0){
-        console.log('Eliminado con éxito');
-    }
-    response.redirect('/estudiantes');
+      request.flash('success', 'Eliminacion correcta');
+      } else {
+      request.flash('error', 'Error al eliminar');
+      }
+      response.redirect('/estudiantes');
+      
 });
 
 // Endpoint para mostrar el formulario de edición
@@ -51,6 +60,7 @@ router.get('/editar/:idestudiante', async (request, response) => {
       }else{
         response.redirect('/estudiantes');
       }
+      
 
     });
 
@@ -63,12 +73,11 @@ router.post('/editar/:id', async (request, response) => {
   const resultado = await queries.actualizarEstudiante(id, datosModificados);
 
   if(resultado){
-    console.log('Estudiante modificado con exito');
-    response.redirect('/estudiantes');
+    request.flash('success','Estudiante modificado con exito');
   }else{
-    console.log('Error al modificar estudiante');
-    response.redirect('/estudiantes/editar/'+ idestudiante);
+    request.flash('error','Error al modificar estudiante');
   }
+  response.redirect('/estudiantes');
 });
 
 

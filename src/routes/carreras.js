@@ -27,7 +27,13 @@ router.post('/agregar', async(request, response) => {
 
   const resultado = await queries.insertarCarrera(nuevaCarrera);
 
-  response.redirect('/carreras');
+  if(resultado){
+    request.flash('success', 'Registro insertado con exito');
+ } else {
+    request.flash('error', 'Ocurrio un problema al guardar el registro');
+ }
+ 
+ response.redirect('/carreras');
 });
 
 
@@ -54,12 +60,12 @@ router.post('/editar/:id', async (request, response) => {
   const resultado = await queries.actualizarCarrera(id, datosModificados);
 
   if(resultado){
-    console.log('Estudiante modificado con exito');
-    response.redirect('/carreras');
+    request.flash('success','Carrera modificado con exito');
   }else{
-    console.log('Error al modificar estudiante');
-    response.redirect('/carreras/editar/'+ idcarrera);
+    request.flash('error','Error al modificar carrera');
   }
+  response.redirect('/carreras');
+
 });
 
 
@@ -70,9 +76,12 @@ router.get('/eliminar/:idcarrera', async(request, response) => {
     const { idcarrera } = request.params;
     const resultado = await queries.eliminarCarrera(idcarrera);
     if(resultado > 0){
-        console.log('Eliminado con éxito');
-    }
-    response.redirect('/carreras');
+      request.flash('success', 'Eliminacion correcta');
+      } else {
+      request.flash('error', 'Error al eliminar');
+      }
+      response.redirect('/carreras');
+      
 });
 
 

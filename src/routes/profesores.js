@@ -25,7 +25,13 @@ router.post('/agregar', async(request, response) => {
 
     const resultado = await queries.insertarProfesor(nuevoProfesor);
 
-    response.redirect('/profesores');
+    if(resultado){
+      request.flash('success', 'Registro insertado con exito');
+   } else {
+      request.flash('error', 'Ocurrio un problema al guardar el registro');
+   }
+   
+   response.redirect('/profesores');
 });
 
 // Endpoint que permite eliminar un profesor
@@ -34,9 +40,12 @@ router.get('/eliminar/:idprofesor', async(request, response) => {
     const { idprofesor } = request.params;
     const resultado = await queries.eliminarProfesor(idprofesor);
     if(resultado > 0){
-        console.log('Eliminado con éxito');
-    }
-    response.redirect('/profesores');
+      request.flash('success', 'Eliminacion correcta');
+      } else {
+      request.flash('error', 'Error al eliminar');
+      }
+      response.redirect('/profesores');
+      
 });
 
 // Endpoint para mostrar el formulario de edición
@@ -65,12 +74,11 @@ router.post('/editar/:id', async (request, response) => {
   const resultado = await queries.actualizarProfesor(id, datosModificados);
 
   if(resultado){
-    console.log('Profesor modificado con exito');
-    response.redirect('/profesores');
+    request.flash('success','Carrera modificado con exito');
   }else{
-    console.log('Error al modificar ');
-    response.redirect('/profesores/editar/'+ idprofesor);
+    request.flash('error','Error al modificar estudiante');
   }
+  response.redirect('/profesores');
 });
 
 
