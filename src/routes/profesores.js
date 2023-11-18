@@ -1,9 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const queries = require('../repositories/ProfesorRepository');
+const { isLoggedIn } = require('../lib/auth');
+
 
 // Endpoint para mostrar todos los profesores
-router.get('/', async (request, response) => {
+router.get('/',isLoggedIn, async (request, response) => {
   console.log('Entro aqui');
     const profesores = await queries.obtenerTodosLosProfesores();
 
@@ -11,14 +13,14 @@ router.get('/', async (request, response) => {
 });
 
 // Endpoint que permite mostrar el formulario para agregar un nuevo profesor
-router.get('/agregar', async(request, response) => {
+router.get('/agregar',isLoggedIn, async(request, response) => {
 
     // Renderizamos el formulario
     response.render('profesores/agregar');
 });
 
 // Endpoint para agregar un profesor
-router.post('/agregar', async(request, response) => {
+router.post('/agregar',isLoggedIn, async(request, response) => {
     
     const { idprofesor, nombre,apellido,fecha_nacimiento, profesion, genero, email } = request.body;
     const nuevoProfesor = { idprofesor, nombre, apellido, fecha_nacimiento,profesion,genero,email };
@@ -35,7 +37,7 @@ router.post('/agregar', async(request, response) => {
 });
 
 // Endpoint que permite eliminar un profesor
-router.get('/eliminar/:idprofesor', async(request, response) => {
+router.get('/eliminar/:idprofesor',isLoggedIn, async(request, response) => {
     // Desestructuramos el objeto que nos mandan en la peticion y extraemos el idprofesor
     const { idprofesor } = request.params;
     const resultado = await queries.eliminarProfesor(idprofesor);
@@ -49,7 +51,7 @@ router.get('/eliminar/:idprofesor', async(request, response) => {
 });
 
 // Endpoint para mostrar el formulario de edición
-router.get('/editar/:idprofesor', async (request, response) => {
+router.get('/editar/:idprofesor',isLoggedIn, async (request, response) => {
     
     
         const { idprofesor } = request.params;
@@ -66,7 +68,7 @@ router.get('/editar/:idprofesor', async (request, response) => {
 });
 
 // Endpoint que permite editar un profesor
-router.post('/editar/:id', async (request, response) => {
+router.post('/editar/:id',isLoggedIn, async (request, response) => {
   const { id } = request.params;
   const {idprofesor,nombre,apellido,fecha_nacimiento,profesion,genero,email} = request.body;
   const datosModificados = {idprofesor,nombre,apellido,fecha_nacimiento,profesion,genero,email};
@@ -74,9 +76,9 @@ router.post('/editar/:id', async (request, response) => {
   const resultado = await queries.actualizarProfesor(id, datosModificados);
 
   if(resultado){
-    request.flash('success','Carrera modificado con exito');
+    request.flash('success','profesor modificado con exito');
   }else{
-    request.flash('error','Error al modificar estudiante');
+    request.flash('error','Error al modificar profesor');
   }
   response.redirect('/profesores');
 });

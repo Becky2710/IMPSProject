@@ -1,9 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const queries = require('../repositories/MateriaRepository');
+const { isLoggedIn } = require('../lib/auth');
+
 
 // Endpoint para mostrar todas las materias
-router.get('/', async (request, response) => {
+router.get('/',isLoggedIn, async (request, response) => {
   console.log('Entro aqui');
     const materias = await queries.obtenerTodasLasMaterias();
     console.log('Salio aqui');
@@ -12,7 +14,7 @@ router.get('/', async (request, response) => {
 });
 
 // Endpoint que permite mostrar el formulario para agregar una nueva materia
-router.get('/agregar', async(request, response) => {
+router.get('/agregar',isLoggedIn, async(request, response) => {
 
     response.render('materias/agregar');
 });
@@ -20,7 +22,7 @@ router.get('/agregar', async(request, response) => {
 
 
 // Endpoint para agregar una materia
-router.post('/agregar', async(request, response) => {
+router.post('/agregar',isLoggedIn, async(request, response) => {
   // Falta agregar logica
   const { idmateria, materia } = request.body;
   const nuevaMateria = { idmateria , materia};
@@ -38,7 +40,7 @@ router.post('/agregar', async(request, response) => {
 
 
 // Endpoint para mostrar el formulario de edición
-router.get('/editar/:idmateria', async (request, response) => {
+router.get('/editar/:idmateria',isLoggedIn, async (request, response) => {
   
         const { idmateria } = request.params;
         const materia = await queries.obtenerMateriaPorid(idmateria);
@@ -52,7 +54,7 @@ router.get('/editar/:idmateria', async (request, response) => {
 });
 
 // Endpoint que permite editar una materia
-router.post('/editar/:id', async (request, response) => {
+router.post('/editar/:id',isLoggedIn, async (request, response) => {
   const { id} = request.params;
   const {idmateria,materia} = request.body;
   const datosModificados = {idmateria,materia};
@@ -70,7 +72,7 @@ router.post('/editar/:id', async (request, response) => {
 
 
 // Endpoint que permite eliminar una materia
-router.get('/eliminar/:idmateria', async(request, response) => {
+router.get('/eliminar/:idmateria',isLoggedIn, async(request, response) => {
     // Desestructuramos el objeto que nos mandan en la peticion y extraemos el idmateria
     const { idmateria } = request.params;
     const resultado = await queries.eliminarMateria(idmateria);
